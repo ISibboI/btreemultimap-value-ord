@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 description = "A multimap based on the BTreeMultimap where each value is mapped to each key at most once."
 license = "BSD-2-Clause"
+repository = "https://github.com/ISibboI/btreemultimap-value-ord"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
