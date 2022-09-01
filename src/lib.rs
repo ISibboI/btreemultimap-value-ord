@@ -1,6 +1,9 @@
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct BTreeMultiMap<Key, Value> {
     map: BTreeMap<Key, BTreeMap<Value, usize>>,
 }
