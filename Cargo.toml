@@ -5,6 +5,7 @@ edition = "2021"
 description = "A multimap based on the BTreeMultimap where multiple copies of a value are stored only once."
 license = "BSD-2-Clause"
 repository = "https://github.com/ISibboI/btreemultimap-value-ord"
+rust-version = "1.56.1"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
