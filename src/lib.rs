@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-#[derive(Clone, Debug, Default, Eq, PartialEq, Hash)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct BTreeMultiMap<Key, Value> {
     map: BTreeMap<Key, BTreeSet<Value>>,
 }
@@ -55,5 +55,27 @@ impl<Key, Value> BTreeMultiMap<Key, Value> {
         } else {
             false
         }
+    }
+}
+
+impl<Key, Value> Default for BTreeMultiMap<Key, Value> {
+    fn default() -> Self {
+        Self {
+            map: Default::default(),
+        }
+    }
+}
+
+impl<Key, Value> FromIterator<(Key, Value)> for BTreeMultiMap<Key, Value>
+where
+    Key: Ord,
+    Value: Ord,
+{
+    fn from_iter<T: IntoIterator<Item = (Key, Value)>>(iter: T) -> Self {
+        let mut result = Self::default();
+        for (key, value) in iter {
+            result.insert(key, value);
+        }
+        result
     }
 }
