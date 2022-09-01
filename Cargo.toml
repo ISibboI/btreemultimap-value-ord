@@ -2,7 +2,7 @@
 name = "btreemultimap-value-ord"
 version = "0.2.0"
 edition = "2021"
-description = "A multimap based on the BTreeMultimap where each value is mapped to each key at most once."
+description = "A multimap based on the BTreeMultimap where multiple copies of a value are stored only once."
 license = "BSD-2-Clause"
 repository = "https://github.com/ISibboI/btreemultimap-value-ord"
 

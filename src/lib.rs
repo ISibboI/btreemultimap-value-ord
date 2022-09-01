@@ -1,8 +1,8 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeMap;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct BTreeMultiMap<Key, Value> {
-    map: BTreeMap<Key, BTreeSet<Value>>,
+    map: BTreeMap<Key, BTreeMap<Value, usize>>,
 }
 
 impl<Key, Value> BTreeMultiMap<Key, Value> {
@@ -18,27 +18,42 @@ impl<Key, Value> BTreeMultiMap<Key, Value> {
         self.map.clear()
     }
 
-    pub fn insert(&mut self, key: Key, value: Value) -> bool
+    pub fn insert(&mut self, key: Key, value: Value)
     where
         Key: Ord,
         Value: Ord,
     {
-        if let Some(set) = self.map.get_mut(&key) {
-            set.insert(value)
+        if let Some(map) = self.map.get_mut(&key) {
+            if let Some(count) = map.get_mut(&value) {
+                *count += 1;
+            } else {
+                map.insert(value, 1);
+            }
         } else {
-            self.map.insert(key, BTreeSet::from([value]));
-            true
+            self.map.insert(key, BTreeMap::from([(value, 1)]));
         }
     }
 
-    pub fn get(&self, key: &Key) -> Option<&BTreeSet<Value>>
+    pub fn get(&self, key: &Key) -> Option<&BTreeMap<Value, usize>>
     where
         Key: Ord,
     {
         self.map.get(key)
     }
 
-    pub fn remove(&mut self, key: &Key) -> Option<BTreeSet<Value>>
+    pub fn get_value_count(&self, key: &Key, value: &Value) -> usize
+    where
+        Key: Ord,
+        Value: Ord,
+    {
+        if let Some(map) = self.map.get(key) {
+            map.get(value).copied().unwrap_or(0)
+        } else {
+            0
+        }
+    }
+
+    pub fn remove(&mut self, key: &Key) -> Option<BTreeMap<Value, usize>>
     where
         Key: Ord,
     {
@@ -50,8 +65,16 @@ impl<Key, Value> BTreeMultiMap<Key, Value> {
         Key: Ord,
         Value: Ord,
     {
-        if let Some(set) = self.map.get_mut(key) {
-            set.remove(value)
+        if let Some(map) = self.map.get_mut(key) {
+            if let Some(count) = map.get_mut(value) {
+                *count -= 1;
+                if *count == 0 {
+                    map.remove(value);
+                }
+                true
+            } else {
+                false
+            }
         } else {
             false
         }
